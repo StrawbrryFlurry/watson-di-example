@@ -7,14 +7,20 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "ESNext",
     "module": "esnext",
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@nyaa": ["packages/library/src/index.ts"],
+      "@nyaa-lib/*": ["packages/library/src/lib/*"],
+
+      "@ex/features/*": ["packages/example/src/features/*"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
