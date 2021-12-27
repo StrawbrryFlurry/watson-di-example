@@ -1,10 +1,9 @@
-import { NyaApplication, NyaControllerRef, NyaModuleRef } from '@nyaa';
+import { NyaApplication, NyaControllerRef } from '@nyaa';
 import { Injectable, W_GLOBAL_PROV } from '@watsonjs/di';
 
 import { AppModule } from './app.module';
 import { CatsController, CatsModule } from './features';
 
-NyaModuleRef;
 const bootstrap = async () => {
   const app = await NyaApplication.create(AppModule);
 
