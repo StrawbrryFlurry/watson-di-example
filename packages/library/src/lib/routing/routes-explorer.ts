@@ -35,6 +35,7 @@ export class RoutesExplorer {
     return this._routesMap;
   }
   private _routesMap = new Map<string, ResolvedRoute>();
+  private _controllerCache = new Set();
 
   constructor(private _injector: Injector) {}
 
@@ -100,7 +101,7 @@ export class RoutesExplorer {
     const getPath = `${controllerPath}/${path}`;
     const handlerPath = getPath.startsWith('/') ? getPath : `/${getPath}`;
 
-    const callback = this._createCallbackFn(controllerRef, method);
+    const callback = this._createCallbackFn(moduleRef, controllerRef, method);
 
     return {
       path: handlerPath,
@@ -112,6 +113,7 @@ export class RoutesExplorer {
   }
 
   private _createCallbackFn(
+    moduleRef: NyaModuleRef,
     controllerRef: NyaControllerRef,
     method: MethodDescriptor
   ): NyaRequestCallbackFn {
@@ -132,13 +134,33 @@ export class RoutesExplorer {
       ];
 
       const contextInjector = new ContextInjector(ctxProviders, controllerRef);
+
+      // Ways to create component instances using the new `ComponentFactory`:
       /**
-       * There will be a `ComponentFactory` class available from
-       * the moduleRef in the future which will allow you to
-       * dynamically create instances of components or other
-       * providers of that module.
+       * // Using the `ComponentFactoryRef` of `ComponentRef`
+       * const controllerFactory = await controllerRef.get(ComponentFactoryRef);
+       * const controller = await controllerFactory.create(contextInjector);
+       *
+       * // Using the `ComponentFactoryResolver` of `ModuleRef`
+       * const controllerFac = await moduleRef.componentFactoryResolver.resolve(
+       *  metatype
+       *  );
+       * const controller = await controllerFac.create(null, contextInjector);
        */
-      const controller = await controllerRef.getInstance(contextInjector);
+
+      // Using the `createComponent` method on `ModuleRef`
+      const controller = await moduleRef.createComponent(
+        metatype,
+        contextInjector
+      );
+
+      if (this._controllerCache.has(controller)) {
+        console.log('Get controller instance from cache');
+      } else {
+        console.log('Created new instance of controller');
+      }
+      this._controllerCache.add(controller);
+
       const deps: unknown[] = [];
 
       for (let i = 0; i < params.length; i++) {
