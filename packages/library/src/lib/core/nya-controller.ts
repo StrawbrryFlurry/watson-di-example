@@ -1,11 +1,11 @@
 import { NYA_CONTROLLER_METADATA, NyaControllerDecoratorOptions } from '@nyaa-lib/decorators';
-import { ModuleRef, ProviderResolvable, Reflector, Type, WatsonComponentRef } from '@watsonjs/di';
+import { ComponentRef, Constructable, ModuleRef, ProviderResolvable, Reflector } from '@watsonjs/di';
 
-export class NyaControllerRef<T = any> extends WatsonComponentRef<T> {
+export class NyaControllerRef<T extends object = any> extends ComponentRef<T> {
   public path: string = '';
 
   constructor(
-    metatype: Type,
+    metatype: Constructable<T>,
     providers: ProviderResolvable[],
     moduleRef: ModuleRef
   ) {
