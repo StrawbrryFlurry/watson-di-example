@@ -5,7 +5,7 @@ import { DeclareModuleRef, Injector, ModuleDef, ModuleRef, Type } from '@watsonj
 // be used as ModuleRef. This is required when using a
 // custom component implementation.
 @DeclareModuleRef()
-export class NyaModuleRef<T = any> extends ModuleRef<T> {
+export class NyaModuleRef<T extends object = any> extends ModuleRef<T> {
   public controllers: Type[] = [];
 
   constructor(

@@ -2,7 +2,7 @@ import {
   Binding,
   Injector,
   InjectorGetResult,
-  InjectorInquirerContext,
+  InquirerContext,
   Providable,
   Type,
   ValueProvider,
@@ -33,9 +33,9 @@ export class ContextInjector implements Injector {
     typeOrToken: T,
     notFoundValue?: any,
     ctx?: Injector | null,
-    inquirerContext: InjectorInquirerContext<
+    inquirerContext: InquirerContext<
       Type<any> | Binding<any, any[], any, any> | typeof Injector
-    > = new InjectorInquirerContext()
+    > = new InquirerContext()
   ): Promise<R> {
     const binding = this._records.get(typeOrToken);
 

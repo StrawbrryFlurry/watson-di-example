@@ -14,7 +14,7 @@ specifiers:
   '@types/node': 14.14.33
   '@typescript-eslint/eslint-plugin': ~5.3.0
   '@typescript-eslint/parser': ~5.3.0
-  '@watsonjs/di': 0.0.15
+  '@watsonjs/di': 0.0.16
   '@watsonjs/ts-transformer': ^0.0.3
   eslint: 8.2.0
   eslint-config-prettier: 8.1.0
@@ -28,7 +28,7 @@ specifiers:
 
 dependencies:
   '@types/express': 4.17.13
-  '@watsonjs/di': 0.0.15
+  '@watsonjs/di': 0.0.16
   '@watsonjs/ts-transformer': 0.0.3_typescript@4.5.4
   express: 4.17.2
   reflect-metadata: 0.1.13
@@ -1304,8 +1304,8 @@ packages:
       eslint-visitor-keys: 3.1.0
     dev: true
 
-  /@watsonjs/di/0.0.15:
-    resolution: {integrity: sha512-p1vsaVVLdljhLHv9gFuiwxuzx7GZtSh6h7qwbnyTEEqkT9NrhCltrK4yK3uBNbdVCdcAGRd5wT1EnFfcR4btuQ==}
+  /@watsonjs/di/0.0.16:
+    resolution: {integrity: sha512-Y8v5wqavp7kvTI//aok30AF2HeMG0T2JBeUYD5mDSramnvArjDeSqQu5T/08Tf44pD8PZnu1b0hNF792WucrvQ==}
     dependencies:
       reflect-metadata: 0.1.13
       rxjs: 6.6.7
