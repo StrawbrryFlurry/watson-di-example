@@ -7,9 +7,17 @@ import {
   ReqResParameterMetadata,
 } from '@nyaa-lib/decorators';
 import { REQUEST, RESPONSE } from '@nyaa-lib/routing';
-import { isNil } from '@nyaa-lib/utils';
-import { Injector, MethodDescriptor, ModuleContainer, Providable, Reflector, Type } from '@watsonjs/di';
+import { isNil, log } from '@nyaa-lib/utils';
+import {
+  Injector,
+  MethodDescriptor,
+  ModuleContainer,
+  Providable,
+  Reflector,
+  Type,
+} from '@watsonjs/di';
 import { Request, Response } from 'express';
+import { red, white, yellow } from 'cli-color';
 
 export type NyaRequestCallbackFn = (
   request: Request,
@@ -35,7 +43,7 @@ export class RoutesExplorer {
     return this._routesMap;
   }
   private _routesMap = new Map<string, ResolvedRoute>();
-  private _controllerCache = new Set();
+  private _controllerCache = new WeakSet<any>();
 
   constructor(private _injector: Injector) {}
 
@@ -44,6 +52,7 @@ export class RoutesExplorer {
     const { modules } = moduleContainerRef;
 
     for (const [metatype, moduleRef] of modules) {
+      log('RoutesExplorer', `Exploring routes of ${white(metatype.name)}`);
       const { controllers } = <NyaModuleRef>moduleRef;
 
       if (isNil(controllers)) {
@@ -94,14 +103,18 @@ export class RoutesExplorer {
     const { propertyKey } = method;
     const { path: controllerPath } = controllerRef;
     /**
-     * In an actual app you would prolly
+     * In an actual app you would probably
      * also include the paths from parent
-     * controllers and stuff.
+     * controllers...
      */
     const getPath = `${controllerPath}/${path}`;
     const handlerPath = getPath.startsWith('/') ? getPath : `/${getPath}`;
 
     const callback = this._createCallbackFn(moduleRef, controllerRef, method);
+    log(
+      'RoutesExplorer',
+      `Register route: ${white(handlerPath)} in ${white(controllerRef.name)}`
+    );
 
     return {
       path: handlerPath,
@@ -155,20 +168,35 @@ export class RoutesExplorer {
       );
 
       if (this._controllerCache.has(controller)) {
-        console.log('Get controller instance from cache');
+        log(
+          'RouteHandler',
+          `Get instance of ${white(metatype.name)} from cache`
+        );
       } else {
-        console.log('Created new instance of controller');
+        log('RouteHandler', `Create instance of ${white(metatype.name)}`);
+        this._controllerCache.add(controller);
       }
-      this._controllerCache.add(controller);
 
       const deps: unknown[] = [];
 
       for (let i = 0; i < params.length; i++) {
         const param = params[i];
+        log(
+          'RouteHandler',
+          `Resolve parameter provider dependency [${white(param.name)}]`
+        );
         const dep = await contextInjector.get(param);
         deps[i] = dep;
       }
 
+      log(
+        'RouteHandler',
+        `Call controller request handler ${white(metatype.name)}.${white(
+          propertyKey
+        )}${red('(')}${params
+          .map((p) => yellow(p.name))
+          .join(white(', '))}${red(')')}`
+      );
       return descriptor.apply(controller, deps);
     };
   }

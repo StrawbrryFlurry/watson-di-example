@@ -1,4 +1,6 @@
 import { NyaApplication, NyaControllerRef } from '@nyaa';
+import { log } from '@nyaa-lib/utils';
+import { white } from 'cli-color';
 
 import { AppModule } from './app.module';
 import { CatsController, CatsModule } from './features';
@@ -13,6 +15,6 @@ const bootstrap = async () => {
   >(CatsController);
 
   await app.start();
-  console.log('Started :3');
+  log('Bootstrap', white(`Application started`));
 };
 bootstrap();

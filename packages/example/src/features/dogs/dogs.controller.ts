@@ -12,7 +12,7 @@ export class DogsController {
     @Inject(RESPONSE) private _response: Response
   ) {}
 
-  @NyaGet('')
+  @NyaGet()
   public dogsHandler() {
     return 'Hi 🐶';
   }

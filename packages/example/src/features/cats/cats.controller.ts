@@ -11,9 +11,7 @@ export class CatsController implements AfterResolution {
     private _hatService: HatsService
   ) {}
 
-  afterResolution(injector: Injector): void {
-    console.log(this._hatService.getHats());
-  }
+  afterResolution(injector: Injector): void {}
 
   @NyaGet('nyaa')
   getHandler(@Req() request: Request, @Res() response: Response) {

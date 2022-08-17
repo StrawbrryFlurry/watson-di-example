@@ -1,5 +1,7 @@
 import { NyaRequestCallbackFn, ResolvedRoute } from '@nyaa-lib/routing';
+import { log } from '@nyaa-lib/utils';
 import { InjectionToken, InjectorLifetime } from '@watsonjs/di';
+import { white } from 'cli-color';
 import express, { Application, Request, Response } from 'express';
 
 export const REQUEST = new InjectionToken('The request object', {
@@ -23,14 +25,16 @@ export class RequestHandler {
       const { method, callback, controller, methodName } = route;
       const handler = this._interceptCallback(callback);
       this._client.get(path, handler);
-      console.log(
-        `[RequestHandler] Mapped [${method}] "${path}" from ${controller.name} - "${methodName}"`
-      );
+      log('RequestHandler', `Mapped ${white(`[${method}]`)} ${path}`);
     }
   }
 
   public start(): Promise<Application> {
     return new Promise((res) => {
+      log(
+        'Application',
+        `Started listening on: ${white('http://localhost:3000')}`
+      );
       this._client.listen(3000, () => res(this._client));
     });
   }

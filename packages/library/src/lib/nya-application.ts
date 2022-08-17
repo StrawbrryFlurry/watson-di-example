@@ -1,7 +1,9 @@
 import { ApplicationRef, Injector, ModuleLoader, Type } from '@watsonjs/di';
+import { white } from 'cli-color';
 import { Application } from 'express';
 
 import { RequestHandler, RoutesExplorer } from './routing';
+import { log } from './utils';
 
 export class NyaApplication extends ApplicationRef {
   private constructor(injector: Injector) {
@@ -9,8 +11,11 @@ export class NyaApplication extends ApplicationRef {
   }
 
   public static async create(module: Type): Promise<NyaApplication> {
+    log('Application', 'Creating application');
+
     const rootInjector = Injector.create([]);
     const moduleLoader = new ModuleLoader(rootInjector);
+    log('Application', `Load module ${white(module.name)}`);
     const rootModuleRef = await moduleLoader.resolveRootModule(module);
     const applicationRef = new NyaApplication(rootInjector);
 
